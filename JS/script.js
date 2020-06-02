@@ -29,12 +29,12 @@ console.log(tasks)
 function addTask(e){
  //Create a new List Item with the check and remove icons
  const newTask = {
-            task : taskInput.value.toUpperCase(),
+            task : taskInput.value.trim().toUpperCase(),
             status : "Not completed"
               }
 
+if(newTask.task != ''){
 addItems(newTask.task, newTask.status);
-
 
 localStorage.getItem('tasks') ? tasks = JSON.parse(localStorage.getItem('tasks')) : tasks = []
 tasks.push(newTask);
@@ -43,7 +43,10 @@ localStorage.setItem('tasks', JSON.stringify(tasks));
 //Set the input field to blanks
 taskInput.value= '';
 }
-
+else {
+    alert("Enter a valid task")
+}
+}
 // Function to Add task items to the local storage
 function addItems(task,status){
     const list = document.createElement("li");
@@ -59,7 +62,7 @@ function addItems(task,status){
     }
     else{
         list.style.textDecoration = "none";
-        list.style.color = "black";
+        list.style.color = "white";
     }
     // Append it to List of Items
     taskList.appendChild(list);
@@ -71,16 +74,28 @@ function addItems(task,status){
 
 //Function to remove item
 function removeOrCompleteTask(e){
+    
     if(e.target.classList.contains('fa-remove'))
         {
         tasks.forEach((taskItem,index)=>{
             if (taskItem.task.toUpperCase() == 
                 e.target.parentElement.parentElement.parentElement.textContent.trim().toUpperCase()){
                 tasks.splice(index,1)
-            }     
+                console.log("Hi")
+            }    
+            else{
+                console.log(taskItem.task.toUpperCase())
+                console.log(taskItem.task.toUpperCase().length)
+                console.log(e.target.parentElement.parentElement.parentElement.textContent.trim().toUpperCase())
+                console.log(e.target.parentElement.parentElement.parentElement.textContent.trim().toUpperCase().length)
+                
+                console.log("else")
+            } 
         })
         e.target.parentElement.parentElement.parentElement.remove();
+        console.log(JSON.stringify(tasks))
         localStorage.setItem('tasks',JSON.stringify(tasks));
+
         }
     else if (e.target.classList.contains('fa-check'))
         {
@@ -91,7 +106,7 @@ function removeOrCompleteTask(e){
                 "line-through";
 
             (e.target.parentElement.parentElement.parentElement.style.color == "green") ? 
-            e.target.parentElement.parentElement.parentElement.style.color= "black" :
+            e.target.parentElement.parentElement.parentElement.style.color= "white" :
             e.target.parentElement.parentElement.parentElement.style.color= "green"; 
          
             tasks.forEach((taskItem,index)=>{
