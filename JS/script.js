@@ -7,7 +7,6 @@ const addButton = document.querySelector('#addBtn'),
 let taskfilteredItems, tasks;  
 
 
-
 //Load Event Listeners
 addButton.addEventListener('click', addTask)
 taskList.addEventListener('click', removeOrCompleteTask)    
@@ -21,8 +20,9 @@ document.addEventListener('DOMContentLoaded',populateItems)
 function populateItems(){
 localStorage.getItem('tasks') ? tasks = JSON.parse(localStorage.getItem('tasks')) : tasks = []
 tasks.forEach((taskItem)=>{
-    addItems(taskItem.task.toUpperCase());
+    addItems(taskItem.task.toUpperCase(),taskItem.status);
 })
+console.log(tasks)
 }
 
 //Function to Add a new Task
@@ -33,7 +33,7 @@ function addTask(e){
             status : "Not completed"
               }
 
-addItems(taskInput.value.toUpperCase());
+addItems(newTask.task, newTask.status);
 
 
 localStorage.getItem('tasks') ? tasks = JSON.parse(localStorage.getItem('tasks')) : tasks = []
@@ -44,17 +44,28 @@ localStorage.setItem('tasks', JSON.stringify(tasks));
 taskInput.value= '';
 }
 
-function addItems(task){
+// Function to Add task items to the local storage
+function addItems(task,status){
     const list = document.createElement("li");
-    // Set the new list item with task  and icons              
-     list.innerHTML = `${task}
-                    <span class="u-pull-right">
+    // Set the new list item with task  and icons         
+     list.innerHTML = `${task}<span class="u-pull-right">
                     <a><i class="fa fa-check" style="color:green"></i></a>
                     <a><i class="fa fa-remove" style="color:red"></i></a></span>
                     </li><hr>`;
     list.className = "u-full-width";
+    if (status =='completed'){
+        list.style.textDecoration = "line-through";
+        list.style.color = "green"; 
+    }
+    else{
+        list.style.textDecoration = "none";
+        list.style.color = "black";
+    }
     // Append it to List of Items
     taskList.appendChild(list);
+
+    
+
 
 }
 
@@ -62,11 +73,18 @@ function addItems(task){
 function removeOrCompleteTask(e){
     if(e.target.classList.contains('fa-remove'))
         {
+        tasks.forEach((taskItem,index)=>{
+            if (taskItem.task.toUpperCase() == 
+                e.target.parentElement.parentElement.parentElement.textContent.trim().toUpperCase()){
+                tasks.splice(index,1)
+            }     
+        })
         e.target.parentElement.parentElement.parentElement.remove();
-        console.log(e.target.parentElement.parentElement.parentElement.textContent);
+        localStorage.setItem('tasks',JSON.stringify(tasks));
         }
     else if (e.target.classList.contains('fa-check'))
         {
+
             (e.target.parentElement.parentElement.parentElement.style.textDecoration == "line-through") ? 
             e.target.parentElement.parentElement.parentElement.style.textDecoration= "none" :
             e.target.parentElement.parentElement.parentElement.style.textDecoration= 
@@ -74,24 +92,58 @@ function removeOrCompleteTask(e){
 
             (e.target.parentElement.parentElement.parentElement.style.color == "green") ? 
             e.target.parentElement.parentElement.parentElement.style.color= "black" :
-            e.target.parentElement.parentElement.parentElement.style.color= "green";
+            e.target.parentElement.parentElement.parentElement.style.color= "green"; 
+         
+            tasks.forEach((taskItem,index)=>{
+                if (taskItem.task.toUpperCase() == 
+                e.target.parentElement.parentElement.parentElement.textContent.trim().toUpperCase()) {
+                if (e.target.parentElement.parentElement.parentElement.style.textDecoration == "line-through") 
+                {  
+                    tasks.splice(index,1,  {
+                        task : taskItem.task.toUpperCase(),
+                        status : "completed"
+                    })
+                }
+                else{
+                    tasks.splice(index,1,  {
+                        task : taskItem.task.toUpperCase(),
+                        status : "Not completed"
+                    })
+                }
+                }
+                })
+        localStorage.setItem('tasks',JSON.stringify(tasks));      
         }
     }
-
-
+            
 //Function to Remove all Task Items
 function removeAllTasks(){
+    console.log(tasks)
     if (taskfilteredItems){
-        taskfilteredItems.forEach((taskItem)=>{
-              taskItem.remove();
+        taskfilteredItems.forEach((taskfilteredItem)=>{
+            tasks.forEach((taskItem,index)=>{
+                    if (taskItem.task.toUpperCase() == taskfilteredItem.textContent.trim().toUpperCase()){
+                        tasks.splice(index,1)
+                    }
+
+        taskfilteredItem.remove();
         })
-    }
+})
+        localStorage.setItem('tasks',JSON.stringify(tasks));
+}
     else {
     while (taskList.firstChild){
-        taskList.firstChild.remove();
-    }
-}}
+        tasks.forEach((taskItem,index)=>{
+            if (taskItem.task.toUpperCase() == taskList.firstChild.textContent.trim().toUpperCase()){
+                tasks.splice(index,1)
+            }
+        })
+    taskList.firstChild.remove();
+}
+    localStorage.setItem('tasks',JSON.stringify(tasks));
+}
 
+}
 
 //Function to filter the tasks inputs based on input values
 function filterTasks (){
