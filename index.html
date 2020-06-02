@@ -12,34 +12,48 @@
 
 <div class="container">
     <h4 style="text-align: center;"><u>To do List Tracker</u></h4>
-    <br>
+    <hr>
     <div class="row">
-        <div class="four columns">
+        <div class="five columns">
             <label for="task">Add Task</label>
-            <input type="text" placeholder="Enter your task" name="task" class="u-full-width">
-            <input type="button" value="Add Task">
+            <input type="text" placeholder="Enter your task" name="task" class="u-full-width taskInput">
+            <input type="button" value="Add Task" id="addBtn">
         </div> 
-      <div class="eight columns">
+        <div class="one columns">
+            <span>.</span>
+        </div>
+      <div class="six columns">
+        <div class="row">
+        <div class="twelve columns">
+            <input type="text" placeholder="Enter your task to filter" name="task" class="u-full-width filtertask">
+        </div>  
+        </div>
+        <div class="row">
         <h5><u>List of Tasks</u></h5>
-        <ul class="taskList">
-            <li class="u-full-width">Tesco - Groceriers Purchase
-            <span class="u-pull-right">
-            <a><i class="fa fa-check"></i> </a>
-            <a><i class="fa fa-remove"></i></a></span>
-            </li>
-            <li class="u-full-width">Make simple Web App for Task List Tracker
-            <span class="u-pull-right">
-                <a><i class="fa fa-check"></i> </a>
-                <a><i class="fa fa-remove u-cf"></i></a>
-            </li>
-            </span>
-            <li>Load it to a Git Repository
-            <span class="u-pull-right">
-                <a><i class="fa fa-check"></i> </a>
-                <a><i class="fa fa-remove"></i></a></span>
-        </li>
-        </ul>
-    <input type="button" value="Clear All">
+                <div class="twelve columns">
+                    <ul class="taskList">
+                        <li class="u-full-width taskItem">Tesco - Groceriers Purchase
+                        <span class="u-pull-right">
+                        <a><i class="fa fa-check" style="color:green"></i> </a>
+                        <a><i class="fa fa-remove" style="color:red"></i></a></span>
+                        </li>
+                        <li class="u-full-width taskItem">Make simple Web App for Task List Tracker
+                        <span class="u-pull-right">
+                            <a><i class="fa fa-check"></i> </a>
+                            <a><i class="fa fa-remove"></i></a>
+                        </li>
+                        </span>
+                        <li>Load it to a Git Repository
+                        <span class="u-pull-right taskItem">
+                            <a><i class="fa fa-check"></i> </a>
+                            <a><i class="fa fa-remove"></i></a></span>
+                    </li>
+                    </ul>
+                    <input type="button" value="Clear All" class="button-primary clearTasks">
+                </div>
+        </div>  
+    </div>
 </div>   
+<script src="JS/script.js"></script>
 </body>
 </html>
